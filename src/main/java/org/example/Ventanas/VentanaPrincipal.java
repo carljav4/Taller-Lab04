@@ -2,9 +2,6 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 public class VentanaPrincipal extends JFrame {
     public VentanaPrincipal() {
@@ -16,10 +13,10 @@ public class VentanaPrincipal extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 1));
 
-        JButton chileButton = new JButton("Chile", new ImageIcon("C:\\Users\\diego\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.png"));
-        JButton australiaButton = new JButton("Australia", new ImageIcon("C:\\Users\\diego\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\aus.png"));
-        JButton alemaniaButton = new JButton("Alemania", new ImageIcon("C:\\Users\\diego\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.png"));
-        JButton cmrButton = new JButton("Camerún", new ImageIcon("C:\\Users\\diego\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\cmr.png"));
+        JButton chileButton = new JButton("Chile", new ImageIcon("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.png"));
+        JButton australiaButton = new JButton("Australia", new ImageIcon("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\aus.png"));
+        JButton alemaniaButton = new JButton("Alemania", new ImageIcon("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.png"));
+        JButton cmrButton = new JButton("Camerún", new ImageIcon("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\cmr.png"));
         JButton salirButton = new JButton("Salir");
 
         panel.add(chileButton);
@@ -57,12 +54,5 @@ public class VentanaPrincipal extends JFrame {
                 break;
         }
         ventanaEquipo.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
-            ventanaPrincipal.setVisible(true);
-        });
     }
 }
