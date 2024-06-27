@@ -2,16 +2,15 @@ package org.example.Ventanas;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import modelo.ChileModel;
 
 public class Chile extends JFrame {
     private JTextArea textArea;
-    private final int MAX_JUGADORES = 23;
+    private ChileModel chileModel;
 
     public Chile() {
+        chileModel = new ChileModel();
+
         setTitle("Equipo de Chile");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(400, 300);
@@ -30,41 +29,13 @@ public class Chile extends JFrame {
         buttonPanel.add(guardarButton);
         buttonPanel.add(salirButton);
 
-        guardarButton.addActionListener(e -> guardarCambios("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt"));
+        guardarButton.addActionListener(e -> chileModel.guardarCambios(textArea.getText(), "C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt"));
 
         salirButton.addActionListener(e -> dispose());
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt");
-    }
-
-    private void cargarEquipoDesdeArchivo(String nombreArchivo) {
-        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
-            String linea;
-            StringBuilder equipo = new StringBuilder();
-            while ((linea = br.readLine()) != null) {
-                equipo.append(linea).append("\n");
-            }
-            textArea.setText(equipo.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void guardarCambios(String nombreArchivo) {
-        String[] jugadores = textArea.getText().split("\n");
-        if (jugadores.length != MAX_JUGADORES) {
-            JOptionPane.showMessageDialog(this, "No es posible modificar la cantidad de jugadores del plantel");
-            return;
-        }
-
-        try (FileWriter writer = new FileWriter(nombreArchivo)) {
-            writer.write(textArea.getText());
-            JOptionPane.showMessageDialog(this, "Cambios guardados correctamente");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        textArea.setText(chileModel.cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt"));
     }
 }

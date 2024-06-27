@@ -2,16 +2,15 @@ package org.example.Ventanas;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import modelo.AlemaniaModel;
 
 public class Alemania extends JFrame {
     private JTextArea textArea;
-    private final int MAX_JUGADORES = 23;
+    private AlemaniaModel alemaniaModel;
 
     public Alemania() {
+        alemaniaModel = new AlemaniaModel();
+
         setTitle("Equipo de Alemania");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(400, 300);
@@ -30,41 +29,13 @@ public class Alemania extends JFrame {
         buttonPanel.add(guardarButton);
         buttonPanel.add(salirButton);
 
-        guardarButton.addActionListener(e -> guardarCambios("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt"));
+        guardarButton.addActionListener(e -> alemaniaModel.guardarCambios(textArea.getText(), "C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt"));
 
         salirButton.addActionListener(e -> dispose());
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt");
-    }
-
-    private void cargarEquipoDesdeArchivo(String nombreArchivo) {
-        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
-            String linea;
-            StringBuilder equipo = new StringBuilder();
-            while ((linea = br.readLine()) != null) {
-                equipo.append(linea).append("\n");
-            }
-            textArea.setText(equipo.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void guardarCambios(String nombreArchivo) {
-        String[] jugadores = textArea.getText().split("\n");
-        if (jugadores.length != MAX_JUGADORES) {
-            JOptionPane.showMessageDialog(this, "No es posible modificar la cantidad de jugadores del plantel");
-            return;
-        }
-
-        try (FileWriter writer = new FileWriter(nombreArchivo)) {
-            writer.write(textArea.getText());
-            JOptionPane.showMessageDialog(this, "Cambios guardados correctamente");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        textArea.setText(alemaniaModel.cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt"));
     }
 }
