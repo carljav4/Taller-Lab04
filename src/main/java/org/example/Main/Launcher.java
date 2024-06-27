@@ -1,4 +1,6 @@
-package org.example;
+package org.example.Main;
+
+import org.example.Ventanas.VentanaPrincipal;
 
 import javax.swing.*;
 

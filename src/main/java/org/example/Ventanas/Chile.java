@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Ventanas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,15 +7,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Alemania extends JFrame {
+public class Chile extends JFrame {
     private JTextArea textArea;
     private final int MAX_JUGADORES = 23;
 
-    public Alemania() {
-        setTitle("Equipo de Alemania");
+    public Chile() {
+        setTitle("Equipo de Chile");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(400, 300);
-        setLocation(1350, 0);
+        setLocation(450, 0);
 
         textArea = new JTextArea();
 
@@ -30,14 +30,14 @@ public class Alemania extends JFrame {
         buttonPanel.add(guardarButton);
         buttonPanel.add(salirButton);
 
-        guardarButton.addActionListener(e -> guardarCambios("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt"));
+        guardarButton.addActionListener(e -> guardarCambios("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt"));
 
         salirButton.addActionListener(e -> dispose());
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt");
+        cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt");
     }
 
     private void cargarEquipoDesdeArchivo(String nombreArchivo) {

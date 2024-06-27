@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Ventanas;
 
 import javax.swing.*;
 import java.awt.*;
