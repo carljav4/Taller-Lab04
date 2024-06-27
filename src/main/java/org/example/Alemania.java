@@ -2,16 +2,14 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
 public class Alemania extends JFrame {
     private JTextArea textArea;
+    private final int MAX_JUGADORES = 23;
 
     public Alemania() {
         setTitle("Equipo de Alemania");
@@ -32,14 +30,14 @@ public class Alemania extends JFrame {
         buttonPanel.add(guardarButton);
         buttonPanel.add(salirButton);
 
-        guardarButton.addActionListener(e -> guardarCambios("C:\\Users\\diego\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt"));
+        guardarButton.addActionListener(e -> guardarCambios("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt"));
 
         salirButton.addActionListener(e -> dispose());
 
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        cargarEquipoDesdeArchivo("C:\\Users\\diego\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt");
+        cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\ger.txt");
     }
 
     private void cargarEquipoDesdeArchivo(String nombreArchivo) {
@@ -56,18 +54,17 @@ public class Alemania extends JFrame {
     }
 
     private void guardarCambios(String nombreArchivo) {
+        String[] jugadores = textArea.getText().split("\n");
+        if (jugadores.length != MAX_JUGADORES) {
+            JOptionPane.showMessageDialog(this, "No es posible modificar la cantidad de jugadores del plantel");
+            return;
+        }
+
         try (FileWriter writer = new FileWriter(nombreArchivo)) {
             writer.write(textArea.getText());
             JOptionPane.showMessageDialog(this, "Cambios guardados correctamente");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Alemania ventanaAlemania = new Alemania();
-            ventanaAlemania.setVisible(true);
-        });
     }
 }
