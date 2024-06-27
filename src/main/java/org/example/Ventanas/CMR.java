@@ -1,41 +1,73 @@
 package org.example.Ventanas;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import modelo.CMRModel;
+import modelo.EquipoModel;
 
 public class CMR extends JFrame {
-    private JTextArea textArea;
-    private CMRModel cmrModel;
+    private JTable table;
+    private EquipoModel equipoModel;
 
     public CMR() {
-        cmrModel = new CMRModel();
+        equipoModel = new EquipoModel();
 
-        setTitle("Equipo de Camerún");
+        setTitle("Players");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(400, 300);
-        setLocation(1800, 0);
+        setSize(500, 400);
+        setLocationRelativeTo(null);
 
-        textArea = new JTextArea();
+        DefaultTableModel tableModel = new DefaultTableModel(
+                new Object[]{"Number", "Name", "Position"},
+                0
+        );
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        cargarDatos("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\cam.txt", tableModel);
 
-        JButton guardarButton = new JButton("Guardar cambios");
-        JButton salirButton = new JButton("Cerrar");
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+        JButton editButton = new JButton("Edit player");
+        JButton saveButton = new JButton("Save changes");
+        JButton backButton = new JButton("Back");
+
+        saveButton.addActionListener(e -> {
+            StringBuilder content = new StringBuilder();
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                    content.append(tableModel.getValueAt(i, j)).append(";");
+                }
+                content.setLength(content.length() - 1);
+                content.append("\n");
+            }
+            equipoModel.guardarCambios(content.toString(), "C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\cam.txt");
+        });
+
+        backButton.addActionListener(e -> dispose());
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(guardarButton);
-        buttonPanel.add(salirButton);
+        buttonPanel.add(editButton);
+        buttonPanel.add(saveButton);
+        buttonPanel.add(backButton);
 
-        guardarButton.addActionListener(e -> cmrModel.guardarCambios(textArea.getText(), "C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\cmr.txt"));
-
-        salirButton.addActionListener(e -> dispose());
-
+        setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+    }
 
-        textArea.setText(cmrModel.cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\cmr.txt"));
+    private void cargarDatos(String filePath, DefaultTableModel tableModel) {
+        String equipo = equipoModel.cargarEquipoDesdeArchivo(filePath);
+        String[] lineas = equipo.split("\n");
+        for (String linea : lineas) {
+            String[] columns = linea.split(";");
+            tableModel.addRow(columns);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            CMR frame = new CMR();
+            frame.setVisible(true);
+        });
     }
 }

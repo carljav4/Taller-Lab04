@@ -1,41 +1,74 @@
 package org.example.Ventanas;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import modelo.ChileModel;
+import modelo.EquipoModel;
 
 public class Chile extends JFrame {
-    private JTextArea textArea;
-    private ChileModel chileModel;
+    private JTable table;
+    private EquipoModel equipoModel;
 
     public Chile() {
-        chileModel = new ChileModel();
+        equipoModel = new EquipoModel();
 
-        setTitle("Equipo de Chile");
+        setTitle("Players");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(400, 300);
-        setLocation(450, 0);
+        setSize(500, 400);
+        setLocationRelativeTo(null);
 
-        textArea = new JTextArea();
+        DefaultTableModel tableModel = new DefaultTableModel(
+                new Object[]{"Number", "Name", "Position"},
+                0
+        );
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        cargarDatos("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt", tableModel);
 
-        JButton guardarButton = new JButton("Guardar cambios");
-        JButton salirButton = new JButton("Cerrar");
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
+        JButton editButton = new JButton("Edit player");
+        JButton saveButton = new JButton("Save changes");
+        JButton backButton = new JButton("Back");
+
+        saveButton.addActionListener(e -> {
+            StringBuilder content = new StringBuilder();
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                    content.append(tableModel.getValueAt(i, j)).append(";");
+                }
+                content.setLength(content.length() - 1);
+                content.append("\n");
+            }
+            equipoModel.guardarCambios(content.toString(), "C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt");
+        });
+
+        backButton.addActionListener(e -> dispose());
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(guardarButton);
-        buttonPanel.add(salirButton);
+        buttonPanel.add(editButton);
+        buttonPanel.add(saveButton);
+        buttonPanel.add(backButton);
 
-        guardarButton.addActionListener(e -> chileModel.guardarCambios(textArea.getText(), "C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt"));
-
-        salirButton.addActionListener(e -> dispose());
-
+        setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+    }
 
-        textArea.setText(chileModel.cargarEquipoDesdeArchivo("C:\\Users\\Carlos\\IdeaProjects\\Taller-Lab04\\Datos\\Datos\\chi.txt"));
+    private void cargarDatos(String filePath, DefaultTableModel tableModel) {
+        String equipo = equipoModel.cargarEquipoDesdeArchivo(filePath);
+        String[] lineas = equipo.split("\n");
+        for (String linea : lineas) {
+            String[] columns = linea.split(";");
+            tableModel.addRow(columns);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Chile frame = new Chile();
+            frame.setVisible(true);
+        });
     }
 }
